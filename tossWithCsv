@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        const objToss = {
+            Human: 0,
+            Computer: 0
+        }
+        let result = []
+        function whoISWinner() {
+            //console.log(objToss.Human);
+            //console.log(objToss.Computer);
+            if (objToss.Human > objToss.Computer) {
+                console.log("Human is the Winner")
+                console.log("___________________________________________________________________________________________________")
+            } else if (objToss.Human < objToss.Computer) {
+                console.log("Computer is the Winner")
+                console.log("____________________________________________________________________________________________________")
+            } else {
+                console.log("No One is Winner - Tossing is Drawn")
+                console.log("____________________________________________________________________________________________________")
+            }
+        }
+
+
+        //for give the interval
+        let toss = 1
+        let w = setInterval((function implement() {
+            if (toss > 1) {
+                console.table(objToss)
+                whoISWinner()
+            }
+
+            if (toss == 5) {
+                clearInterval(w)
+                console.table(result)
+                forCsvFile()
+            }
+            else {
+                console.log(`\n TOSS ROUND :- ${toss}\n`);
+                console.log("-----The most Head Taker will be a Winner-----\n")
+                tossing()
+                toss++
+                return implement
+            }
+        }
+        )(), 15000);
+
+        // tosssing the coin for ten times
+        function tossing() {
+            let coin = ["Head", "Tails"]
+            let g = 1
+            let x = setInterval(() => {
+                let humanPlayer = coin[Math.floor(Math.random() * 2)]
+                let computerPlayer = coin[Math.floor(Math.random() * 2)]
+                if (g == 10) {
+                    clearInterval(x)
+                }
+                if (humanPlayer == "Head") {
+                    objToss.Human += 1
+                }
+                if (computerPlayer == "Head") {
+                    objToss.Computer += 1
+                }
+                console.log("Toss:- ", g + " \n" + "HUMAN:- " + " " + humanPlayer + " \n" + "COMPUTER:- ", computerPlayer)
+                console.log("--------------------------------------")
+                g++
+
+                result.push({
+                    TOSSROUND: toss - 1,
+                    HUMAN: humanPlayer,
+                    COMPUTER: computerPlayer
+                })
+            }, 1000);
+        }
+
+
+        //download the csv file
+        function forCsvFile() {
+            csv = ""
+            for (i of result) {
+                csv += i.TOSSROUND + ","
+                csv += i.HUMAN + ","
+                csv += i.COMPUTER + ","
+                csv += "\r\n"
+            }
+
+            console.log(csv)
+
+            let tempBloB = new Blob([csv], { type: "text\csv" })
+
+            let tempUrl = window.URL.createObjectURL(tempBloB)
+            let activation = document.createElement("a")
+            activation.href = tempUrl
+
+            activation.download = "coinTossForHumanAndComputer.csv"
+            activation.click()
+            window.URL.revokeObjectURL(tempUrl)
+            activation.remove()
+        }
+    </script>
+</body>
+
+</html>
